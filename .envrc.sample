@@ -1,1 +1,4 @@
 export TELEGRAM_TOKEN=
+export SERVER_BINDING_HOST= #optional. defaults to a new ngrok tunnel
+export SERVER_BINDING_PORT= #optional. defaults to 3000
+export SERVER_EXTERNAL_HOST= #optional. defaults to localhost
