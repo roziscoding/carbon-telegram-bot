@@ -8,7 +8,11 @@ export type ScreenshotOptions = {
 
 export async function getScreenshotFromUrl ({ url, timeout = 2000 }: ScreenshotOptions) {
   const browser = await puppeteer.launch({
-    headless: true
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+    ]
   })
 
   const page = await browser.newPage()
