@@ -1,0 +1,18 @@
+{
+  "name": "Carbon.now.sh Telegram Bot",
+  "description": "Telegram Chatbot that generates carbon.now.sh images from source code",
+  "repository": "https://github.com/rjmunhoz/carbon-telegram-bot",
+  "logo": "https://github.com/carbon-app/carbon/raw/master/static/brand/logo-square.png",
+  "keywords": ["node", "telegram", "code", "chatbot", "carbon", "syntax"],
+  "env": {
+    "TELEGRAM_TOKEN": {
+      "description": "Telegram Bot API token",
+      "required": true
+    },
+    "SERVER_EXTERNAL_HOST": {
+      "description": "Your Heroku app URL, whith HTTPs",
+      "value": "https://my-app.herokuapp.com",
+      "required": true
+    }
+  }
+}
