@@ -1,0 +1,9 @@
+node_modules
+.editorconfig
+.envrc
+.envrc.sample
+app.json
+.gitignore
+*.md
+dist
+.vscode
