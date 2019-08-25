@@ -4,6 +4,9 @@ carbon.now.sh telegram chatbot
 > This project uses code from [carbon-now-cli](https://github.com/mixn/carbon-now-cli). Go give it a star!
 > Also, give [carbon.now.sh](https://github.com/carbon-app/carbon) a star for their awesome work
 
+# Usage
+Just hit it [on Telegram](https://t.me/cabonshbot). It'll tell you what to do
+
 # What is it
 Telegram chatbot created to generate nice code images using puppeteer on carbon.now.sh.
 
