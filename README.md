@@ -25,13 +25,13 @@ Then, choose one of the methods below and follow the instructions.
 - Set all environment variables described in the [sample envs file](.envrc.sample)
 - Run `npm start`
 
-## Trhough Docker
+## Using Docker
 - Clone this repo and cd into it
 - Run `docker build . -t IMAGE_TAG` replacing IMAGE_TAG with the desired local tag for this image
 - - Set all environment variables described in the [sample envs file](.envrc.sample)
 - Run `docker run` command mapping the environment variables
 
-## Through Heroku
+## On Heroku
 
 Just click the button below, set the envs and that's it.
 
