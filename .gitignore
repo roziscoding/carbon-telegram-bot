@@ -1,0 +1,7 @@
+vscode/*
+!vscode/tasks.json
+!vscode/launch.json
+.envrc
+*.tsbuildinfo
+node_modules
+dist
