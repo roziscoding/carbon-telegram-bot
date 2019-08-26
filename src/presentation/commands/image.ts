@@ -15,8 +15,9 @@ export function factory () {
 
     const imageBuffer = await carbon.getScreenshotFromUrl({ url })
 
+
     await ctx.telegram.sendPhoto(ctx.chat.id, { source: imageBuffer }, { reply_to_message_id: ctx.message.message_id })
-    ctx.telegram.deleteMessage(ctx.chat.id, sentMessage.message_id).catch(console.error)
+    ctx.telegram.deleteMessage(ctx.chat.id, sentMessage.message_id)
   }
 }
 

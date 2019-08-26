@@ -8,6 +8,9 @@ export interface IAppConfig {
     bindingHost?: string,
     bindingPort: number,
     externalHost?: string
+  },
+  sentry: {
+    dsn?: string
   }
 }
 
@@ -50,5 +53,8 @@ export const config: IAppConfig = {
     bindingHost: env.get('SERVER_BINDING_HOST') || undefined,
     bindingPort: env.get.int(['SERVER_BINDING_PORT', 'PORT'], 3000),
     externalHost: env.get('SERVER_EXTERNAL_HOST') || undefined
+  },
+  sentry: {
+    dsn: env.get('SENTRY_DSN') || undefined
   }
 }
