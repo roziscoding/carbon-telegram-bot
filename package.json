@@ -1,6 +1,6 @@
 {
   "name": "carbon-telegram-bot",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Telegram Chatbot that generates carbon.now.sh images from source code",
   "main": "dist/index.js",
   "scripts": {
