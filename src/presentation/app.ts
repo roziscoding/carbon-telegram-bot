@@ -1,4 +1,5 @@
 import { commands } from './commands'
+import { handlers } from './handlers'
 import * as Sentry from '@sentry/node'
 import { IAppConfig } from '../app.config'
 import Telegraf, { ContextMessageUpdate } from 'telegraf'
@@ -59,7 +60,10 @@ export async function factory (config: IAppConfig) {
   bot.command('/repo', commands.repo.factory())
   bot.command('/image', commands.image.factory())
 
-  // Send image when code block arrives
+  // Create image from gist
+  bot.hears(handlers.gist.regex, handlers.gist.factory())
+
+  // Send image when code block is received
   bot.entity('pre', commands.image.factory())
 
   return bot

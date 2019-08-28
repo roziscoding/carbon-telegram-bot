@@ -1,6 +1,6 @@
 import carbon from '../../util/carbon'
 import entity from '../../util/entity'
-import { ContextMessageUpdate } from 'telegraf'
+import { ContextMessageUpdate, Extra, Markup } from 'telegraf'
 
 export function factory () {
   return async function handler (ctx: ContextMessageUpdate) {
@@ -15,8 +15,13 @@ export function factory () {
 
     const imageBuffer = await carbon.getScreenshotFromUrl({ url })
 
+    const keyboard = (m: Markup) => m.inlineKeyboard([
+      m.urlButton('Edit on carbon.now.sh', url, false)
+    ], {})
 
-    await ctx.telegram.sendPhoto(ctx.chat.id, { source: imageBuffer }, { reply_to_message_id: ctx.message.message_id })
+    const extra = Extra.markup(keyboard).inReplyTo(ctx.message.message_id)
+
+    await ctx.telegram.sendPhoto(ctx.chat.id, { source: imageBuffer }, extra as any)
     ctx.telegram.deleteMessage(ctx.chat.id, sentMessage.message_id)
   }
 }
