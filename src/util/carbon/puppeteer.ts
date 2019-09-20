@@ -6,9 +6,20 @@ export type ScreenshotOptions = {
   timeout?: number
 }
 
+async function closeFullpageBanner (page: puppeteer.Page) {
+  await page.evaluate(() => {
+    // @ts-ignore
+    const div = document.querySelector('#DIGITAL_CLIMATE_STRIKE')
+    // @ts-ignore
+    if (!div) return
+    // @ts-ignore
+    div.parentElement.removeChild(div)
+  })
+}
+
 export async function getScreenshotFromUrl ({ url, timeout = 2000 }: ScreenshotOptions) {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: !process.env.DEBUG_HEADFULL,
     args: [
       '--no-sandbox',
       '--disable-setuid-sandbox',
@@ -26,6 +37,8 @@ export async function getScreenshotFromUrl ({ url, timeout = 2000 }: ScreenshotO
   })
 
   await page.goto(url, { waitUntil: 'load' })
+
+  await closeFullpageBanner(page)
 
   const exportContainer = await page.waitForSelector('#export-container')
   const elementBounds = await exportContainer.boundingBox()
