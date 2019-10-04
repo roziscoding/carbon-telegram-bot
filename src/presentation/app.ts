@@ -43,7 +43,7 @@ export async function factory (config: IAppConfig) {
   })
 
   bot.start((ctx) => {
-    ctx.replyWithMarkdown('Hi there :D\nSend me a code snippet and I\'ll reply with a nice image of that code.\nI support every langugage supported by carbon.now.sh!\nTo specify the desired langugage, use the [GFD format](https://help.github.com/en/articles/creating-and-highlighting-code-blocks#syntax-highlighting)')
+    ctx.replyWithMarkdown('Hi there :D\nSend me a code snippet and I\'ll reply with a nice image of that code.\nI support every langugage supported by carbon.now.sh!\nTo specify the desired langugage, use the [GFM format](https://help.github.com/en/articles/creating-and-highlighting-code-blocks#syntax-highlighting)')
   })
 
   bot.help((ctx) => {
@@ -59,6 +59,12 @@ export async function factory (config: IAppConfig) {
   bot.command('/url', commands.url.factory())
   bot.command('/repo', commands.repo.factory())
   bot.command('/image', commands.image.factory())
+
+  // Refreshes the code in a message
+  bot.action(handlers.refresh.regex, handlers.refresh.factory())
+
+  // Deletes a message sent by the bot
+  bot.action(handlers.delete.regex, handlers.delete.factory())
 
   // Create image from gist
   bot.hears(handlers.gist.regex, handlers.gist.factory())
