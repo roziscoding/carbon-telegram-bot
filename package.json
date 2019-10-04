@@ -6,9 +6,10 @@
   "scripts": {
     "start": "node dist/index.js",
     "test": "mocha -r tsnode/register -b test/**/*.test.ts --no-warnings",
+    "build:watch": "tsc -w",
     "build": "tsc",
     "build:clean": "rm -rf tsconfig.tsbuildinfo && rm -rf dist && npm run build",
-    "start:debug": "concurrently -n tsc,nodemon -i --default-input-target nodemon 'tsc -w' 'nodemon dist/index.js'"
+    "start:debug": "concurrently -n tsc,nodemon -i --default-input-target nodemon \"tsc -w\" \"nodemon dist/index.js\""
   },
   "repository": {
     "type": "git",
