@@ -51,6 +51,7 @@ export async function factory (config: IAppConfig) {
     lines.push('/repo - See my source code')
     lines.push('/url - Get a carbon url for your code')
     lines.push('/image - Get an image for a block of code')
+    lines.push('\nI now work in inline mode to create images form gist URLs. Just type my username, followed by the desired gist')
     lines.push('\nAlso, you can send me any preformated code or code block, and I\'ll reply with the image, even on groups!')
     lines.push('\nPS: Changing theme and other settings shold be supported soon. Help is very welcome! Check /repo if you would like to contribute.')
     ctx.reply(lines.join('\n'))
@@ -66,11 +67,37 @@ export async function factory (config: IAppConfig) {
   // Deletes a message sent by the bot
   bot.action(handlers.delete.regex, handlers.delete.factory())
 
+  // Smiles to the user
+  bot.action('ok', ctx => ctx.answerCbQuery('OK, hold on :D'))
+
   // Create image from gist
   bot.hears(handlers.gist.regex, handlers.gist.factory())
 
   // Send image when code block is received
   bot.entity('pre', commands.image.factory())
+
+  bot.on('inline_query', ctx => {
+    if (!ctx.inlineQuery) return
+    if (!ctx.inlineQuery.query.match(handlers.inlineGist.regex)) return
+
+    return handlers.inlineGist.factory()(ctx)
+      .catch(err => {
+        console.error(`Error processing inline query ${JSON.stringify(ctx.inlineQuery!.query)}`)
+        console.error(err)
+      })
+  })
+
+  bot.on('chosen_inline_result', ctx => {
+    if (!ctx.chosenInlineResult) return
+    if (!ctx.chosenInlineResult.inline_message_id) return
+    if (!ctx.chosenInlineResult.result_id.match(handlers.chosenResultGist.regex)) return
+
+    handlers.chosenResultGist.factory()(ctx)
+      .catch(err => {
+        console.error(`Error processing ${JSON.stringify(ctx.chosenInlineResult)}`)
+        console.error(err)
+      })
+  })
 
   return bot
 }

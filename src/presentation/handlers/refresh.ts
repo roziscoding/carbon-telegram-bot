@@ -22,10 +22,7 @@ function factory () {
 
     const imageBuffer = await carbon.getScreenshotFromUrl({ url })
 
-    if (!imageBuffer) {
-      console.log('No image buffer')
-      return
-    }
+    if (!imageBuffer) return console.log('No image buffer')
 
     const inputMedia = {
       type: 'photo',
