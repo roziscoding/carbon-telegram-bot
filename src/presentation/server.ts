@@ -13,11 +13,16 @@ export async function start (config: IAppConfig) {
 
   const externalHost = await getWebhookExternalHost(config)
 
+  const { username } = await bot.telegram.getMe()
+
+
   await bot.telegram.setWebhook(`${externalHost}/${config.telegram.token}`)
   console.log(`Webhook set to ${externalHost}`)
 
   bot.startWebhook(`/${config.telegram.token}`, null, config.server.bindingPort, config.server.bindingHost)
   console.log(`Webhook listening on http://${config.server.bindingHost || 'localhost'}:${config.server.bindingPort}`)
+
+  if (username) console.log(`Listening on username @${username}`)
 
   return bot
 }
