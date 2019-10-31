@@ -31,8 +31,8 @@ export async function getScreenshotFromUrl ({ url, timeout = 2000 }: ScreenshotO
   // Set viewport to something big
   // Prevents Carbon from cutting off lines
   await page.setViewport({
-    width: 1600,
-    height: 1000,
+    width: 2560,
+    height: 1080,
     deviceScaleFactor: 2
   })
 
