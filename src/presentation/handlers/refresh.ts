@@ -32,6 +32,7 @@ function factory () {
     const keyboard = getKeyboard(url, { from: originalMessage!.message_id, to: message.message_id }).asString()
 
     await (ctx.telegram as any).editMessageMedia(ctx.chat.id, message.message_id, undefined, inputMedia, keyboard)
+      .catch(() => {})
   }
 }
 
