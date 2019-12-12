@@ -15,7 +15,6 @@ export async function start (config: IAppConfig) {
 
   const { username } = await bot.telegram.getMe()
 
-
   await bot.telegram.setWebhook(`${externalHost}/${config.telegram.token}`)
   console.log(`Webhook set to ${externalHost}`)
 

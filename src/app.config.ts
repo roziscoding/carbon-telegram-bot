@@ -1,4 +1,5 @@
 import env from 'sugar-env'
+import { IMongoParams } from '@nindoo/mongodb-data-layer'
 
 export interface IAppConfig {
   telegram: {
@@ -11,7 +12,8 @@ export interface IAppConfig {
   },
   sentry: {
     dsn?: string
-  }
+  },
+  mongodb: IMongoParams
 }
 
 function getEnvName (names: string | string[]): { name: string, alternatives: string[] } {
@@ -56,5 +58,10 @@ export const config: IAppConfig = {
   },
   sentry: {
     dsn: env.get('SENTRY_DSN') || undefined
+  },
+  mongodb: {
+    uri: requiredString('MONGODB_URI'),
+    dbName: env.get('MONGODB_DBNAME', 'carbon-now-sh'),
+    options: { useUnifiedTopology: true }
   }
 }
