@@ -2,7 +2,8 @@ import { Extra, Markup } from 'telegraf'
 
 type RefreshData = {
   from: number,
-  to: number
+  to: number,
+  hideRefresh?: boolean
 }
 
 function getEditButton (url: string) {
@@ -11,20 +12,25 @@ function getEditButton (url: string) {
   ]
 }
 
-function getRefreshButton (url: string, messageId: number, imageMessageId: number) {
+function getRefreshButton (url: string, messageId: number, imageMessageId: number, hideRefresh = false) {
   const buttons = getEditButton(url)
-  return [
+  const menu = [
     [ ...buttons ],
     [
-      Markup.callbackButton('Refresh', `refresh_${messageId}_to_${imageMessageId}`, false),
       Markup.callbackButton('Delete', `delete_${imageMessageId}`, false)
     ]
   ]
+
+  if (!hideRefresh) {
+    menu[1].unshift(Markup.callbackButton('Refresh', `refresh_${messageId}_to_${imageMessageId}`, false) as any)
+  }
+
+  return menu
 }
 
 function getButtons (url: string, refresh?: RefreshData) {
   return refresh
-    ? getRefreshButton(url, refresh.from, refresh.to)
+    ? getRefreshButton(url, refresh.from, refresh.to, refresh.hideRefresh)
     : getEditButton(url)
 }
 

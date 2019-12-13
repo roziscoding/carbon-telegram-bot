@@ -38,7 +38,8 @@
     "ngrok": "^3.2.5",
     "puppeteer": "^1.19.0",
     "sugar-env": "^1.5.7",
-    "telegraf": "^3.33.3"
+    "telegraf": "^3.33.3",
+    "telegraf-inline-menu": "^4.0.0"
   },
   "devDependencies": {
     "@types/mongodb": "^3.3.7",

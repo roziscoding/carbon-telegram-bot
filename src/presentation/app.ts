@@ -1,7 +1,9 @@
+import menus from './menus'
 import { commands } from './commands'
 import { handlers } from './handlers'
 import * as Sentry from '@sentry/node'
 import { IAppConfig } from '../app.config'
+const session = require('telegraf/session')
 import mongodb from '@nindoo/mongodb-data-layer'
 import userConfig from './middlewares/user-config'
 import Telegraf, { ContextMessageUpdate } from 'telegraf'
@@ -26,14 +28,15 @@ function setUser (ctx: ContextMessageUpdate, scope: Sentry.Scope) {
 
 export async function factory (config: IAppConfig) {
   const bot = new Telegraf(config.telegram.token, { telegram: { webhookReply: false } })
+  bot.use(session())
 
   const mongodbConnection = await mongodb.createConnection(config.mongodb)
   const configMiddleware = userConfig.getMiddleware(mongodbConnection)
   bot.use(configMiddleware)
 
-  bot.command("session", (ctx: any) => {
-      ctx.replyWithHTML(`<pre>${ctx.session, null, 2}</pre>`);
-  })
+  const settingsMenu = menus.settings.factory()
+  bot.command('/settings', commands.settings.factory(settingsMenu))
+  bot.use(settingsMenu.init())
 
   bot.use((ctx, next: any) => {
     Sentry.configureScope(scope => {
