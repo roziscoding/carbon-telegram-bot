@@ -15,6 +15,10 @@ if (config.sentry.dsn) Sentry.init({
 server.start(config)
   .catch(err => {
     console.error('===== Fatal Error =====')
-    console.error(JSON.stringify(err))
+
+    const errStr = JSON.stringify(err)
+    const errMsg = errStr !== '{}' ? errStr : err
+
+    console.error(errMsg)
     process.exit(1)
   })

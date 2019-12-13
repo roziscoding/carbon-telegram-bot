@@ -1,7 +1,11 @@
+import menus from './menus'
 import { commands } from './commands'
 import { handlers } from './handlers'
 import * as Sentry from '@sentry/node'
 import { IAppConfig } from '../app.config'
+const session = require('telegraf/session')
+import mongodb from '@nindoo/mongodb-data-layer'
+import userConfig from './middlewares/user-config'
 import Telegraf, { ContextMessageUpdate } from 'telegraf'
 
 declare module 'telegraf/typings' {
@@ -24,6 +28,15 @@ function setUser (ctx: ContextMessageUpdate, scope: Sentry.Scope) {
 
 export async function factory (config: IAppConfig) {
   const bot = new Telegraf(config.telegram.token, { telegram: { webhookReply: false } })
+  bot.use(session())
+
+  const mongodbConnection = await mongodb.createConnection(config.mongodb)
+  const configMiddleware = userConfig.getMiddleware(mongodbConnection)
+  bot.use(configMiddleware)
+
+  const settingsMenu = menus.settings.factory()
+  bot.command('/settings', commands.settings.factory(settingsMenu))
+  bot.use(settingsMenu.init())
 
   bot.use((ctx, next: any) => {
     Sentry.configureScope(scope => {
@@ -60,6 +73,7 @@ export async function factory (config: IAppConfig) {
   bot.command('/url', commands.url.factory())
   bot.command('/repo', commands.repo.factory())
   bot.command('/image', commands.image.factory())
+  bot.command('/config', commands.config.factory())
 
   // Refreshes the code in a message
   bot.action(handlers.refresh.regex, handlers.refresh.factory())
