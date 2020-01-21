@@ -16,7 +16,7 @@ function factory () {
     const { callbackQuery: { message } } = ctx
     const { reply_to_message: originalMessage } = message
 
-    const url = entity.toUrl(originalMessage!)
+    const url = entity.toUrl(originalMessage!, ctx.userConfig.getConfig().config)
 
     if (!url) return
 

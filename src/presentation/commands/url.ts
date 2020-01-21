@@ -10,7 +10,7 @@ export function factory () {
   return async function handler (ctx: ContextMessageUpdate) {
     if (!ctx.message) return
 
-    const url = entity.toUrl(ctx.message)
+    const url = entity.toUrl(ctx.message, ctx.userConfig.getConfig().config)
     if (!url) return
 
     ctx.replyWithHTML(makeResponse(url), { reply_to_message_id: ctx.message.message_id })

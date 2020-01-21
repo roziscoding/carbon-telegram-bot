@@ -33,7 +33,7 @@ export function factory () {
     if (!isValidKey(key)) return ctx.reply(`"${key}" is not a valid config key`)
     const property = validatorMap[key]
 
-    if (!value) return ctx.replyWithMarkdown(`Current value for \`${key}\` is \`${ctx.userConfig.getWithDefault(key, property.default)}\``)
+    if (!value) return ctx.replyWithMarkdown(`Current value for \`${key}\` is \`${ctx.userConfig.get(key) ?? property.default}\``)
 
     if (!property.validate(value)) return ctx.reply(`"${value}" is not a valid value for key "${key}"`)
 
