@@ -10,7 +10,7 @@ export function factory () {
     if (!ctx.message) return
     if (!ctx.chat) return
 
-    const deleteOriginalMessage = ctx.userConfig.getWithDefault<UserConfig, boolean>('deleteOriginalMessage', defaultUserConfig.deleteOriginalMessage)
+    const deleteOriginalMessage = ctx.userConfig.get<UserConfig, boolean>('deleteOriginalMessage') ?? defaultUserConfig.deleteOriginalMessage
 
     const message = ctx.message.reply_to_message || ctx.message
 
@@ -19,7 +19,7 @@ export function factory () {
 
     const sentMessage = await ctx.reply('Processing...', { reply_to_message_id: ctx.message.message_id })
 
-    const url = entity.toUrl(message)
+    const url = entity.toUrl(message, ctx.userConfig.getConfig().config)
 
     if (!url) return
 

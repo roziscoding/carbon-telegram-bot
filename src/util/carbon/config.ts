@@ -1,6 +1,6 @@
-const defaultConfig = {
+export const defaultCarbonConfig = {
   // Theme
-  t: 'seti',
+  t: 'dracula',
   // Language
   l: 'auto',
   // Background
@@ -27,9 +27,9 @@ const defaultConfig = {
   // Line height
   lh: '133%',
   // Padding vertical
-  pv: '48px',
+  pv: '0',
   // Padding horizontal
-  ph: '32px',
+  ph: '0',
   // Squared image
   si: false,
   // Watermark
@@ -39,9 +39,9 @@ const defaultConfig = {
   es: '2x'
 }
 
-type CarbonConfig = typeof defaultConfig
+export type CarbonConfig = typeof defaultCarbonConfig
 
-export type Config = {
+export type ReadableCarbonConfig = {
   backgroundColor: CarbonConfig['bg'],
   theme: CarbonConfig['t'],
   windowTheme: CarbonConfig['wt'],
@@ -62,7 +62,7 @@ export type Config = {
   watermark: CarbonConfig['wm']
 }
 
-const botToCarbon: Record<keyof Config, keyof CarbonConfig> = {
+const botToCarbon: Record<keyof ReadableCarbonConfig, keyof CarbonConfig> = {
   backgroundColor: 'bg',
   theme: 't',
   windowTheme: 'wt',
@@ -83,41 +83,21 @@ const botToCarbon: Record<keyof Config, keyof CarbonConfig> = {
   watermark: 'wm'
 }
 
-// const carbonToBot = {
-//   bg: 'backgroundColor',
-//   t: 'theme',
-//   wt: 'windowTheme',
-//   l: 'language',
-//   ds: 'dropShadow',
-//   dsyoff: 'dropShadowOffsetY',
-//   dsblur: 'dropShadowBlurRadius',
-//   wc: 'windowControls',
-//   wa: 'widthAdjustment',
-//   pv: 'paddingVertical',
-//   ph: 'paddingHorizontal',
-//   ln: 'lineNumbers',
-//   fm: 'fontFamily',
-//   fs: 'fontSize',
-//   lh: 'lineHeight',
-//   si: 'squaredImage',
-//   es: 'exportSize',
-//   wm: 'watermark'
-// }
-
-function translateToCarbon (config: Partial<Config>) {
+export function translateToCarbon (config: Partial<ReadableCarbonConfig>) {
   let obj = {} as Partial<CarbonConfig>
 
   for (const [name, value] of Object.entries(config)) {
-    const carbonConfigName = botToCarbon[name as keyof Config]
+    const carbonConfigName = botToCarbon[name as keyof ReadableCarbonConfig]
+    if (!carbonConfigName) continue
     obj[carbonConfigName] = value as any
   }
 
   return obj
 }
 
-export function getConfig (settings: Partial<Config>): CarbonConfig {
+export function getConfig (settings: Partial<ReadableCarbonConfig>): CarbonConfig {
   return {
-    ...defaultConfig,
+    ...defaultCarbonConfig,
     ...translateToCarbon(settings)
   }
 }

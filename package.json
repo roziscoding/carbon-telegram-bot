@@ -6,10 +6,11 @@
   "scripts": {
     "start": "node dist/index.js",
     "test": "mocha -r tsnode/register -b test/**/*.test.ts --no-warnings",
+    "clean": "rm -rf tsconfig.tsbuildinfo && rm -rf dist",
     "build:watch": "tsc -w",
     "build": "tsc",
-    "build:clean": "rm -rf tsconfig.tsbuildinfo && rm -rf dist && npm run build",
-    "start:debug": "concurrently -n tsc,nodemon -i --default-input-target nodemon \"tsc -w\" \"nodemon dist/index.js\""
+    "build:clean": "npm run clean && npm run build",
+    "start:debug": "tsnd src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -44,7 +45,7 @@
   "devDependencies": {
     "@types/mongodb": "^3.3.7",
     "@types/puppeteer": "^1.19.1",
-    "concurrently": "^4.1.2",
+    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.3"
   },
   "peerDependencies": {

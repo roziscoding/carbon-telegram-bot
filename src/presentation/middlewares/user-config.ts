@@ -1,6 +1,8 @@
 import { Collection, Db } from 'mongodb'
 import { ContextMessageUpdate } from 'telegraf/typings'
 
+export type UserConfigWrapper = ReturnType<typeof getUserConfigWrapper>
+
 declare module 'telegraf' {
   export interface ContextMessageUpdate {
     userConfig: UserConfigWrapper
@@ -30,23 +32,14 @@ const defaultOptions: Options = {
   defaultConfig: {}
 }
 
-function getEntryFromUserConfig<TConfig, TDefaultValue> (config: TConfig, key: keyof TConfig): TConfig[typeof key] | undefined
-function getEntryFromUserConfig<TConfig, TDefaultValue> (config: TConfig, key: keyof TConfig, defaultValue: TDefaultValue): TConfig[typeof key] | TDefaultValue
-function getEntryFromUserConfig<TConfig, TDefaultValue> (config: TConfig, key: keyof TConfig, defaultValue?: TDefaultValue) {
-  return config[key] ?? defaultValue
-}
-
 
 function getUserConfigWrapper (config: UserConfig) {
   return {
     getConfig: () => config,
     set: <TConfig>(key: keyof TConfig, value: TConfig[typeof key]) => { config.config[key] = value },
-    get: <TConfig>(key: keyof TConfig) => getEntryFromUserConfig(config.config, key),
-    getWithDefault: <TConfig, TDefaultValue>(key: keyof TConfig, defaultValue: TDefaultValue) => getEntryFromUserConfig(config.config, key, defaultValue)
+    get: <TConfig, TReturn = unknown>(key: keyof TConfig): TReturn => config.config[key]
   }
 }
-
-export type UserConfigWrapper = ReturnType<typeof getUserConfigWrapper>
 
 async function getUserConfig (key: string, collection: Collection, defaultConfig: any): Promise<UserConfig> {
   return collection.findOne({ key })
@@ -83,4 +76,4 @@ export function getMiddleware (connection: Db, options: Partial<Options> = defau
   }
 }
 
-export default { getMiddleware }
+export default { getMiddleware, factory: getMiddleware }

@@ -2,7 +2,7 @@ import { ContextMessageUpdate } from 'telegraf'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 export function factory (menu: TelegrafInlineMenu) {
-  const middleware = menu.replyMenuMiddleware().middleware()
+  const middleware = menu.init()
 
   return (ctx: ContextMessageUpdate, next: any) => {
     if (ctx.chat?.type === 'private') {

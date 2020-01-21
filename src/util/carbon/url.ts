@@ -1,9 +1,9 @@
 import qs from 'querystring'
-import { getConfig, Config } from './config'
+import { getConfig, ReadableCarbonConfig } from './config'
 
 const BASE_URL = 'https://carbon.now.sh'
 
-export function getUrl (language: string, source: string, options: Partial<Config>) {
+export function getUrl (language: string, source: string, options: Partial<ReadableCarbonConfig>) {
   const config = getConfig({ ...options, language })
   const encodedSource = encodeURIComponent(source)
 
