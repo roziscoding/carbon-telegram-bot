@@ -3,7 +3,6 @@ import repo from './repo'
 import help from './help'
 import image from './image'
 import start from './start'
-import config from './config'
 import settings from './settings'
 import Telegraf, { ContextMessageUpdate } from 'telegraf'
 import TelegrafInlineMenu from 'telegraf-inline-menu/dist/source'
@@ -15,16 +14,15 @@ declare module 'telegraf/typings' {
 }
 
 export function install (bot: Telegraf<ContextMessageUpdate>, settingsMenu: TelegrafInlineMenu) {
-  bot.command('/settings', commands.settings.factory(settingsMenu))
+  bot.command('/settings', settings.factory(settingsMenu))
   bot.use(settingsMenu.init({ backButtonText: '◀️ Back', mainMenuButtonText: '🏘 Main menu' }))
 
-  bot.help(commands.help.factory())
-  bot.start(commands.start.factory())
-  bot.entity('pre', commands.image.factory())
-  bot.command('/url', commands.url.factory())
-  bot.command('/repo', commands.repo.factory())
-  bot.command('/image', commands.image.factory())
-  bot.command('/config', commands.config.factory())
+  bot.help(help.factory())
+  bot.start(start.factory())
+  bot.entity('pre', image.factory())
+  bot.command('/url', url.factory())
+  bot.command('/repo', repo.factory())
+  bot.command('/image', image.factory())
 }
 
 export const commands = {
@@ -33,7 +31,6 @@ export const commands = {
   help,
   image,
   start,
-  config,
   settings
 }
 
