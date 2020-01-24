@@ -4,8 +4,9 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 export function deleteOriginalMessage (menu: TelegrafInlineMenu) {
   menu.toggle('Delete original message', 'deleteOriginalMessage', {
+    prefixFalse: '☑️',
     setFunc: (ctx, newValue) => ctx.userConfig.set<UserConfig>('deleteOriginalMessage', newValue),
-    isSetFunc: (ctx) => ctx.userConfig.get<UserConfig, boolean>('deleteOriginalMessage') ?? defaultUserConfig.deleteOriginalMessage
+    isSetFunc: (ctx) => ctx.userConfig.get<UserConfig, boolean>('deleteOriginalMessage') ?? defaultUserConfig.deleteOriginalMessage,
   })
 }
 

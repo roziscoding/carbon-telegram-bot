@@ -4,6 +4,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 export function squaredImage (menu: TelegrafInlineMenu) {
   menu.toggle('Square image', 'squaredImage', {
+    prefixFalse: '☑️',
     setFunc: (ctx, newValue) => ctx.userConfig.set<UserConfig>('squaredImage', newValue),
     isSetFunc: (ctx) => ctx.userConfig.get<UserConfig, boolean>('squaredImage') ?? defaultUserConfig.squaredImage
   })

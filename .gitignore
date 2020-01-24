@@ -5,3 +5,4 @@ vscode/*
 *.tsbuildinfo
 node_modules
 dist
+broadcast.js

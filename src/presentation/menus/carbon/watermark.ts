@@ -4,6 +4,7 @@ import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 export function watermark (menu: TelegrafInlineMenu) {
   menu.toggle('Show watermark', 'watermark', {
+    prefixFalse: '☑️',
     setFunc: (ctx, newValue) => ctx.userConfig.set<UserConfig>('watermark', newValue),
     isSetFunc: (ctx) => ctx.userConfig.get<UserConfig, boolean>('watermark') ?? defaultUserConfig.watermark
   })
