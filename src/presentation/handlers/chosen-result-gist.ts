@@ -17,8 +17,9 @@ function factory () {
     if (!match || !match.groups || !match.groups.gistId || !match.groups.userId) return console.log('Bad return 2')
 
     const { groups: { gistId, userId } } = match
+    const config = ctx.userConfig.getConfig().config
 
-    const url = getGistUrl(gistId)
+    const url = getGistUrl(gistId, config)
 
     const imageBuffer = await getScreenshotFromUrl({ url })
 
