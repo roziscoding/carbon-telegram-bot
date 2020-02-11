@@ -27,6 +27,7 @@ export function factory () {
         if (ctx.chat && ctx.message) {
           ctx.telegram.sendMessage(ctx.chat.id, 'Error processing message', { reply_to_message_id: ctx.message.message_id })
             .catch(console.error)
+            .then(() => process.exit(1))
         }
       })
   }
