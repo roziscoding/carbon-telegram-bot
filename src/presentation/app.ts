@@ -18,6 +18,20 @@ export async function factory (config: IAppConfig) {
   bot.use(middlewares.sentry.factory())
   bot.use(middlewares.userConfig.factory(mongodbConnection, { defaultConfig: defaultUserConfig }))
 
+  bot.use((ctx, next) => {
+    if (!next) return
+
+    if (!config.logMessages) return next()
+    if (!ctx.message?.from?.id) return next()
+
+    console.log()
+    console.log(`Handling message from ${ctx.message.from?.first_name} <${ctx.message.from.id}>`)
+    console.log(ctx.message.text)
+    console.log()
+
+    next()
+  })
+
   handlers.install(bot)
   commands.install(bot, settingsMenu)
   bot.action('ok', ctx => ctx.answerCbQuery('OK, hold on :D'))

@@ -13,7 +13,8 @@ export interface IAppConfig {
   sentry: {
     dsn?: string
   },
-  mongodb: IMongoParams
+  mongodb: IMongoParams,
+  logMessages: boolean
 }
 
 function getEnvName (names: string | string[]): { name: string, alternatives: string[] } {
@@ -63,5 +64,6 @@ export const config: IAppConfig = {
     uri: requiredString('MONGODB_URI'),
     dbName: env.get('MONGODB_DBNAME', 'carbon-now-sh'),
     options: { useUnifiedTopology: true }
-  }
+  },
+  logMessages: env.get.boolean('LOG_MESSAGES', false)
 }
