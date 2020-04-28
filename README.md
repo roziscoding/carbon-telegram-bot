@@ -10,9 +10,9 @@ Just hit it [on Telegram](https://t.me/cabonshbot). It'll tell you what to do
 # What is it
 Telegram chatbot created to generate nice code images using puppeteer on carbon.now.sh.
 
-Everytime it gets a block or line of pre-formatted code (surrounded by one or three backticks), it generates an image with default settings (for now) on [carbon.now.sh](https://carbon.now.sh), an uses puppeteer to grab a screenshot of that page.
+Everytime it gets a block of pre-formatted code (surrounded by three backticks), it generates an image with on [carbon.now.sh](https://carbon.now.sh), an uses puppeteer to grab a screenshot of that page.
 
-Configuration options and other features are coming soon. PRs are very welcome.
+If you want, you can change the default theme and settings for your images by sending the `/settings` command on a private chat with the bot. This settings apply to you regardless of the chat (groups or private) you are in.
 
 # How to run it
 The first thing you'll need is an authorization token to communicate with Telegram's bot API. You can get it from [BotFather](https://t.me/botfather).
