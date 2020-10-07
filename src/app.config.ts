@@ -4,22 +4,22 @@ import { IMongoParams } from '@nindoo/mongodb-data-layer'
 export interface IAppConfig {
   telegram: {
     token: string
-  },
+  }
   server: {
-    bindingHost?: string,
-    bindingPort: number,
+    bindingHost?: string
+    bindingPort: number
     externalHost?: string
-  },
+  }
   sentry: {
     dsn?: string
-  },
-  mongodb: IMongoParams,
+  }
+  mongodb: IMongoParams
   logMessages: boolean
 }
 
-function getEnvName (names: string | string[]): { name: string, alternatives: string[] } {
+function getEnvName(names: string | string[]): { name: string; alternatives: string[] } {
   if (Array.isArray(names)) {
-    const [ name, ...alternatives ] = names
+    const [name, ...alternatives] = names
     return { name, alternatives }
   }
 
@@ -27,12 +27,14 @@ function getEnvName (names: string | string[]): { name: string, alternatives: st
 }
 
 export class MissingRequiredEnvError extends Error {
-  constructor (names: string | string[]) {
+  constructor(names: string | string[]) {
     const { name, alternatives } = getEnvName(names)
     const message = `Missing required environment variable "${name}".`
 
     if (alternatives.length) {
-      super(`${message} Alternative variable names are: ${alternatives.map(a => `"${a}"`).join(', ')}`)
+      super(
+        `${message} Alternative variable names are: ${alternatives.map((a) => `"${a}"`).join(', ')}`
+      )
       return
     }
 
@@ -40,7 +42,7 @@ export class MissingRequiredEnvError extends Error {
   }
 }
 
-function requiredString (names: string | string[]) {
+function requiredString(names: string | string[]) {
   const value = env.get(names)
 
   if (!value) throw new MissingRequiredEnvError(names)
@@ -63,7 +65,11 @@ export const config: IAppConfig = {
   mongodb: {
     uri: requiredString('MONGODB_URI'),
     dbName: env.get('MONGODB_DBNAME', 'carbon-now-sh'),
-    options: { useUnifiedTopology: true }
+    options: {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      poolSize: env.get.int('MONGODB_POOL_SIZE', 5)
+    }
   },
   logMessages: env.get.boolean('LOG_MESSAGES', false)
 }

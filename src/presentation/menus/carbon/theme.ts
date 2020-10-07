@@ -1,14 +1,14 @@
-import '../../middlewares/user-config'
 import { themes } from '../../../util/carbon/themes'
 import TelegrafInlineMenu from 'telegraf-inline-menu/dist/source'
-import { UserConfig } from '../../types/UserConfig'
 
-export function install (parentMenu: TelegrafInlineMenu) {
+export function install(parentMenu: TelegrafInlineMenu) {
   const menu = new TelegrafInlineMenu('Choose a theme:')
 
   menu.select('select_theme', themes, {
-    setFunc: (ctx, id) => ctx.userConfig.set<UserConfig>('theme', id),
-    isSetFunc: (ctx, key) => ctx.userConfig.get<UserConfig, string>('theme') === key,
+    setFunc: async (ctx, id) => {
+      await ctx.config.set('theme', id)
+    },
+    isSetFunc: async (ctx, key) => (await ctx.config.get('theme')) === key,
     columns: 2
   })
 

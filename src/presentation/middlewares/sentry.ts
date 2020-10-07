@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/node'
 import { ContextMessageUpdate } from 'telegraf'
 
-function setUser (ctx: ContextMessageUpdate, scope: Sentry.Scope) {
+function setUser(ctx: ContextMessageUpdate, scope: Sentry.Scope) {
   if (!ctx.from || !ctx.chat) return
 
   const id = ctx.chat.type === 'private' ? ctx.from.id : ctx.chat.id
@@ -13,23 +13,25 @@ function setUser (ctx: ContextMessageUpdate, scope: Sentry.Scope) {
   })
 }
 
-export function factory () {
+export function factory() {
   return (ctx: ContextMessageUpdate, next: any) => {
-    Sentry.configureScope(scope => {
+    Sentry.configureScope((scope) => {
       setUser(ctx, scope)
       scope.setExtra('update', ctx.update)
     })
 
-    next(ctx)
-      .catch((err: any) => {
-        console.error(`Error processing update ${ctx.update.update_id}: ${err.message}`)
-        Sentry.captureException(err)
-        if (ctx.chat && ctx.message) {
-          ctx.telegram.sendMessage(ctx.chat.id, 'Error processing message', { reply_to_message_id: ctx.message.message_id })
-            .catch(console.error)
-            .then(() => process.exit(1))
-        }
-      })
+    next(ctx).catch((err: any) => {
+      console.error(`Error processing update ${ctx.update.update_id}: ${err.message}`)
+      Sentry.captureException(err)
+      if (ctx.chat && ctx.message) {
+        ctx.telegram
+          .sendMessage(ctx.chat.id, 'Error processing message', {
+            reply_to_message_id: ctx.message.message_id
+          })
+          .catch(console.error)
+          .finally(() => process.exit(1))
+      }
+    })
   }
 }
 

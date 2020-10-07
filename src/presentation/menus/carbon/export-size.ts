@@ -1,13 +1,13 @@
-import '../../middlewares/user-config'
 import TelegrafInlineMenu from 'telegraf-inline-menu/dist/source'
-import { UserConfig } from '../../types/UserConfig'
 
-export function install (parentMenu: TelegrafInlineMenu) {
+export function install(parentMenu: TelegrafInlineMenu) {
   const menu = new TelegrafInlineMenu('Choose an export size:')
 
   menu.select('select_export_size', ['1x', '2x', '4x'], {
-    setFunc: (ctx, id) => ctx.userConfig.set<UserConfig>('exportSize', id),
-    isSetFunc: (ctx, key) => ctx.userConfig.get<UserConfig, string>('exportSize') === key,
+    setFunc: async (ctx, id) => {
+      await ctx.config.set('exportSize', id)
+    },
+    isSetFunc: async (ctx, key) => (await ctx.config.get('exportSize')) === key,
     columns: 1
   })
 

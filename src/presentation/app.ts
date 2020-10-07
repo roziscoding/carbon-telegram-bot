@@ -2,21 +2,23 @@ import menus from './menus'
 import Telegraf from 'telegraf'
 import commands from './commands'
 import handlers from './handlers'
-import middlewares from './middlewares'
+import * as middlewares from './middlewares'
 import { IAppConfig } from '../app.config'
 const session = require('telegraf/session')
 import mongodb from '@nindoo/mongodb-data-layer'
-import { defaultUserConfig } from './types/UserConfig'
+import ConfigRepository from '../data/repositories/config'
 
-export async function factory (config: IAppConfig) {
+export async function factory(config: IAppConfig) {
   const bot = new Telegraf(config.telegram.token, { telegram: { webhookReply: false } })
 
-  const settingsMenu = menus.factory()
   const mongodbConnection = await mongodb.createConnection(config.mongodb)
+  const configRepository = ConfigRepository.factory(mongodbConnection)
+
+  const settingsMenu = menus.factory()
 
   bot.use(session())
   bot.use(middlewares.sentry.factory())
-  bot.use(middlewares.userConfig.factory(mongodbConnection, { defaultConfig: defaultUserConfig }))
+  bot.use(middlewares.config.factory(configRepository))
 
   bot.use((ctx, next) => {
     if (!next) return
@@ -34,7 +36,7 @@ export async function factory (config: IAppConfig) {
 
   handlers.install(bot)
   commands.install(bot, settingsMenu)
-  bot.action('ok', ctx => ctx.answerCbQuery('OK, hold on :D'))
+  bot.action('ok', (ctx) => ctx.answerCbQuery('OK, hold on :D'))
 
   return bot
 }

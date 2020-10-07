@@ -1,12 +1,12 @@
-import '../../middlewares/user-config'
-import { UserConfig, defaultUserConfig } from '../../types/UserConfig'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-export function watermark (menu: TelegrafInlineMenu) {
+export function watermark(menu: TelegrafInlineMenu) {
   menu.toggle('Show watermark', 'watermark', {
     prefixFalse: '☑️',
-    setFunc: (ctx, newValue) => ctx.userConfig.set<UserConfig>('watermark', newValue),
-    isSetFunc: (ctx) => ctx.userConfig.get<UserConfig, boolean>('watermark') ?? defaultUserConfig.watermark
+    setFunc: async (ctx, newValue) => {
+      await ctx.config.set('watermark', newValue)
+    },
+    isSetFunc: (ctx) => ctx.config.get('watermark')
   })
 }
 
