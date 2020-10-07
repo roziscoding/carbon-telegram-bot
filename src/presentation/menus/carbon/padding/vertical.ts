@@ -1,22 +1,20 @@
-import '../../../middlewares/user-config'
-import { UserConfig, defaultUserConfig } from '../../../types/UserConfig'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-export function paddingVertical (menu: TelegrafInlineMenu) {
+export function paddingVertical(menu: TelegrafInlineMenu) {
   menu.question('Vertical', 'set_paddingV', {
-    questionText: (ctx) => {
-      const currentSize = ctx.userConfig.get<UserConfig>('paddingVertical') ?? defaultUserConfig.paddingVertical
+    questionText: async (ctx) => {
+      const currentSize = await ctx.config.get('paddingVertical')
 
       return `Please insert a new size in px or 0 (Current: ${currentSize})`
     },
-    setFunc: (ctx, value) => {
+    setFunc: async (ctx, value) => {
       if (!value?.match(/^(?:\d+px|0)$/)) {
         ctx.reply('The value you provided is not a valid size. No changes were made')
         return
       }
 
+      await ctx.config.set('paddingVertical', value)
       ctx.reply('Done!')
-      ctx.userConfig.set<UserConfig>('paddingVertical', value)
     },
     uniqueIdentifier: 'paddingV'
   })

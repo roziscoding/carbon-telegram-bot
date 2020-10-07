@@ -1,12 +1,12 @@
-import '../../middlewares/user-config'
-import { UserConfig, defaultUserConfig } from '../../types/UserConfig'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-export function squaredImage (menu: TelegrafInlineMenu) {
+export function squaredImage(menu: TelegrafInlineMenu) {
   menu.toggle('Square image', 'squaredImage', {
     prefixFalse: '☑️',
-    setFunc: (ctx, newValue) => ctx.userConfig.set<UserConfig>('squaredImage', newValue),
-    isSetFunc: (ctx) => ctx.userConfig.get<UserConfig, boolean>('squaredImage') ?? defaultUserConfig.squaredImage
+    setFunc: async (ctx, newValue) => {
+      await ctx.config.set('squaredImage', newValue)
+    },
+    isSetFunc: (ctx) => ctx.config.get('squaredImage')
   })
 }
 

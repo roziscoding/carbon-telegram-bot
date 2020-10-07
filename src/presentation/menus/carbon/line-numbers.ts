@@ -1,12 +1,12 @@
-import '../../middlewares/user-config'
-import { UserConfig, defaultUserConfig } from '../../types/UserConfig'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-export function lineNumbers (menu: TelegrafInlineMenu) {
+export function lineNumbers(menu: TelegrafInlineMenu) {
   menu.toggle('Show line numbers', 'lineNumbers', {
     prefixFalse: '☑️',
-    setFunc: (ctx, newValue) => ctx.userConfig.set<UserConfig>('lineNumbers', newValue),
-    isSetFunc: (ctx) => ctx.userConfig.get<UserConfig, boolean>('lineNumbers') ?? defaultUserConfig.lineNumbers
+    setFunc: async (ctx, newValue) => {
+      await ctx.config.set('lineNumbers', newValue)
+    },
+    isSetFunc: (ctx) => ctx.config.get('lineNumbers')
   })
 }
 

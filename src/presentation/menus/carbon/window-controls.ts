@@ -1,12 +1,12 @@
-import '../../middlewares/user-config'
-import { UserConfig, defaultUserConfig } from '../../types/UserConfig'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
-export function windowControls (menu: TelegrafInlineMenu) {
+export function windowControls(menu: TelegrafInlineMenu) {
   menu.toggle('Show window controls', 'windowControls', {
     prefixFalse: '☑️',
-    setFunc: (ctx, newValue) => ctx.userConfig.set<UserConfig>('windowControls', newValue),
-    isSetFunc: (ctx) => ctx.userConfig.get<UserConfig, boolean>('windowControls') ?? defaultUserConfig.windowControls
+    setFunc: async (ctx, newValue) => {
+      await ctx.config.set('windowControls', newValue)
+    },
+    isSetFunc: (ctx) => ctx.config.get('windowControls')
   })
 }
 

@@ -1,7 +1,2 @@
-import sentry from './sentry'
-import userConfig from './user-config'
-
-export default {
-  sentry,
-  userConfig
-}
+export * as config from './config'
+export * as sentry from './sentry'

@@ -7,13 +7,16 @@ import settings from './settings'
 import Telegraf, { ContextMessageUpdate } from 'telegraf'
 import TelegrafInlineMenu from 'telegraf-inline-menu/dist/source'
 
-declare module 'telegraf/typings' {
+declare module 'telegraf' {
   export interface Telegraf<TContext extends ContextMessageUpdate> extends Composer<TContext> {
-    entity: (entity: string | string[] | RegExp | RegExp[] | Function, ...middleware: Middleware<TContext>[]) => void
+    entity: (
+      entity: string | string[] | RegExp | RegExp[] | Function,
+      ...middleware: Middleware<TContext>[]
+    ) => void
   }
 }
 
-export function install (bot: Telegraf<ContextMessageUpdate>, settingsMenu: TelegrafInlineMenu) {
+export function install(bot: Telegraf<ContextMessageUpdate>, settingsMenu: TelegrafInlineMenu) {
   bot.command('/settings', settings.factory(settingsMenu))
   bot.use(settingsMenu.init({ backButtonText: '◀️ Back', mainMenuButtonText: '🏘 Main menu' }))
 
