@@ -5,7 +5,7 @@ carbon.now.sh telegram chatbot
 > Also, give [carbon.now.sh](https://github.com/carbon-app/carbon) a star for their awesome work
 
 # Usage
-Just hit it [on Telegram](https://t.me/cabonshbot). It'll tell you what to do
+Just hit it [on Telegram](https://t.me/carbonshbot). It'll tell you what to do
 
 # What is it
 Telegram chatbot created to generate nice code images using puppeteer on carbon.now.sh.
