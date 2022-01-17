@@ -1,0 +1,3 @@
+apps:
+  - name: carbon-telegram-chatbot
+    script: dist/index.js

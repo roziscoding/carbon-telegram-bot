@@ -4,7 +4,7 @@
   "description": "Telegram Chatbot that generates carbon.now.sh images from source code",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "pm2-runtime start ecosystem.config.yml",
     "test": "mocha -r tsnode/register -b test/**/*.test.ts --no-warnings",
     "clean": "rm -rf tsconfig.tsbuildinfo && rm -rf dist",
     "build:watch": "tsc -w",
@@ -37,6 +37,7 @@
     "@types/node": "^12.7.2",
     "mongodb": "^3.3.3",
     "ngrok": "^3.2.5",
+    "pm2": "^5.1.2",
     "puppeteer": "^1.19.0",
     "sugar-env": "^1.5.7",
     "telegraf": "^3.33.3",
