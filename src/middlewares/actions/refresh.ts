@@ -8,7 +8,7 @@ export const refreshAction = Telegraf.action<BotContext>('refresh', async (ctx) 
   const { message } = query
   const originalMessage = (message as any).reply_to_message as PreMessage
 
-  const { image } = await renderMessage(originalMessage, ctx.user.theme)
+  const { image, isCodeLanguageSupported } = await renderMessage(originalMessage, ctx.user.theme)
 
   if (!image) {
     return ctx.answerCbQuery('Error while rendering code to refresh image')
@@ -16,8 +16,16 @@ export const refreshAction = Telegraf.action<BotContext>('refresh', async (ctx) 
 
   await ctx
     .editMessageMedia(
-      { type: 'photo', media: { source: image } },
-      { reply_markup: { inline_keyboard: DEFAULT_INLINE_KEYBOARD } }
+      {
+        type: 'photo',
+        media: { source: image },
+        caption: isCodeLanguageSupported
+          ? ''
+          : 'Code language was not informed or is not supported.\nThe first line of the code should be the language name.\nCode rendered as "markup".'
+      },
+      {
+        reply_markup: { inline_keyboard: DEFAULT_INLINE_KEYBOARD }
+      }
     )
     .catch(() => {})
 
