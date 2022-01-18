@@ -10,11 +10,13 @@ export async function factory(config: AppConfig) {
   const prisma = new PrismaClient()
 
   bot.on('text', (ctx, next) => {
-    return ctx.message?.entities?.find(
+    const hasProcessableEntity = ctx.message?.entities?.find(
       (entity) => entity.type === 'pre' || entity.type === 'bot_command'
     )
-      ? next()
-      : console.log('dropping text update since no pre or bot_command entity was found')
+
+    if (hasProcessableEntity) {
+      next()
+    }
   })
 
   bot.use((ctx, next) => {

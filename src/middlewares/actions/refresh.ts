@@ -8,7 +8,18 @@ export const refreshAction = Telegraf.action<BotContext>('refresh', async (ctx) 
   const { message } = query
   const originalMessage = (message as any).reply_to_message as PreMessage
 
-  const { image, isCodeLanguageSupported } = await renderMessage(originalMessage, ctx.user.theme)
+  const originalUser = await ctx.prisma.user.findUnique({
+    where: { telegramId: `${originalMessage.from.id}` }
+  })
+
+  if (!originalUser) {
+    return ctx.answerCbQuery('Error updating image')
+  }
+
+  const { image, isCodeLanguageSupported } = await renderMessage(
+    originalMessage,
+    originalUser.theme
+  )
 
   if (!image) {
     return ctx.answerCbQuery('Error while rendering code to refresh image')

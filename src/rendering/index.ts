@@ -21,7 +21,9 @@ const themeMap: Record<string, string | (() => Promise<string>)> = {
   ...Object.fromEntries(
     Object.keys(Theme).map((themeName) => [
       themeName,
-      `https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/${themeName.toLowerCase()}.min.css`
+      themeName === 'Default'
+        ? `https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism.min.css`
+        : `https://cdnjs.cloudflare.com/ajax/libs/prism/1.26.0/themes/prism-${themeName.toLowerCase()}.min.css`
     ])
   ),
   ...{

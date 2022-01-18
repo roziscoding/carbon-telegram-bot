@@ -5,6 +5,10 @@ import { BotContext } from '../../types/BotContext'
 import chunk from 'lodash.chunk'
 
 export const themeCommand = Telegraf.command<BotContext>('/theme', async (ctx, next) => {
+  if (ctx.chat.type !== 'private') {
+    return ctx.reply('This command can only be used in private chats.')
+  }
+
   const themes = Object.keys(Theme)
 
   const chunks = chunk(themes, 10)

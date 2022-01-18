@@ -5,6 +5,7 @@
     "module": "commonjs",
     "rootDir": "./src",
     "outDir": "./dist",
+    "sourceMap": true,
     "removeComments": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
