@@ -9,7 +9,7 @@
     "test": "mocha -r tsnode/register -b test/**/*.test.ts --no-warnings",
     "clean": "rm -rf tsconfig.tsbuildinfo && rm -rf dist",
     "build:watch": "tsc -w",
-    "build": "tsc",
+    "build": "tsc && cp -r src/rendering/themes dist/rendering/themes",
     "build:clean": "npm run clean && npm run build",
     "start:debug": "tsnd src/index.ts"
   },
