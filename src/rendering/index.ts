@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
 import path from 'path'
-import { Browser, chromium } from 'playwright-chromium'
+import { chromium } from 'playwright-chromium'
 import { MessageEntity } from 'telegraf/typings/core/types/typegram'
 import { BotContext } from '../types/BotContext'
 import { PreMessage } from '../types/PreMessage'
@@ -64,11 +64,6 @@ const themeMap: Record<string, string | (() => Promise<string>)> = {
   }
 }
 
-let browser: Browser
-
-process.on('SIGTERM', () => browser?.close())
-process.on('SIGINT', () => browser?.close())
-
 const getEntityText = (text: string, entity: MessageEntity) => {
   return text.substring(entity.offset, entity.offset + entity.length)
 }
@@ -116,7 +111,7 @@ export async function renderMessage(message: PreMessage, theme: Theme) {
 }
 
 export async function renderCode(code: string, language: string, theme: Theme) {
-  browser = browser || (await chromium.launch())
+  const browser = await chromium.launch()
   const page = await browser.newPage()
 
   const themeFromMap = themeMap[theme]
@@ -153,7 +148,7 @@ export async function renderCode(code: string, language: string, theme: Theme) {
     </html>
   `
 
-  await fs.writeFile('./index.html', pageContent)
+  // await fs.writeFile('./index.html', pageContent)
 
   await page.setViewportSize({ height: 10000, width: 10000 })
   await page.setContent(pageContent)
@@ -175,6 +170,7 @@ export async function renderCode(code: string, language: string, theme: Theme) {
   })
 
   await page.close()
+  await browser.close()
 
   return image
 }
