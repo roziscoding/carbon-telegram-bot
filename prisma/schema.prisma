@@ -1,0 +1,65 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
+}
+
+enum Theme {
+  Default
+  Coy
+  Dark
+  Funky
+  Okaidia
+  SolarizedLight
+  Tomorrow
+  Twilight
+  CB
+  GHColors
+  Pojoaque
+  Xonokai
+  Ateliersulphurpoollight
+  Hopscotch
+  AtomDark
+  DuotoneDark
+  DuotoneSea
+  DuotoneSpace
+  DuotoneEarth
+  DuotoneForest
+  DuotoneLight
+  VS
+  VSCodeDarkPlus
+  Darcula
+  a11yDark
+  Dracula
+  Synthwave84
+  ShadesofPurple
+  MaterialDark
+  MaterialLight
+  MaterialOceanic
+  Nord
+  ColdarkCold
+  ColdarkDark
+  Coywithoutshadows
+  GruvboxDark
+  GruvboxLight
+  Lucario
+  NightOwl
+  HoliTheme
+  ZTouch
+  SolarizedDarkAtom
+  OneDark
+  OneLight
+}
+
+model User {
+  id         String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  telegramId String @unique
+  name       String
+  theme      Theme  @default(Okaidia)
+
+  @@map("users")
+}

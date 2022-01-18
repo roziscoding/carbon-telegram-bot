@@ -1,23 +1,12 @@
-import { config } from './app.config'
-// import * as Sentry from '@sentry/node'
-import server from './presentation/server'
-// import { RewriteFrames } from '@sentry/integrations'
+import dotenv from 'dotenv'
+import server from './server'
+import { loadConfig } from './config'
 
-// if (config.sentry.dsn) Sentry.init({
-//   dsn: config.sentry.dsn,
-//   integrations: [
-//     new RewriteFrames({
-//       root: __dirname || process.cwd()
-//     })
-//   ]
-// })
+dotenv.config()
 
-server.start(config).catch((err) => {
-  console.error('===== Fatal Error =====')
+async function start() {
+  const config = loadConfig()
+  return server.start(config)
+}
 
-  const errStr = JSON.stringify(err)
-  const errMsg = errStr !== '{}' ? errStr : err
-
-  console.error(errMsg)
-  process.exit(1)
-})
+start().catch((err) => console.error('---- Error starting server ----\n', err.stack))

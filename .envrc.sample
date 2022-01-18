@@ -1,7 +1,0 @@
-export TELEGRAM_TOKEN=
-export MONGODB_URI=
-export MONGODB_POOL_SIZE=    #optional. defaults to 5
-export SERVER_BINDING_HOST=  #optional. defaults to a new ngrok tunnel
-export SERVER_BINDING_PORT=  #optional. defaults to 3000
-export SERVER_EXTERNAL_HOST= #required if running on docker, optional otherwise. defaults to localhost
-export SENTRY_DSN=           #optional

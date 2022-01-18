@@ -6,3 +6,4 @@ vscode/*
 node_modules
 dist
 broadcast.js
+.env
