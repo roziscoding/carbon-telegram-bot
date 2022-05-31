@@ -1,4 +1,3 @@
-import url from './url'
 import repo from './repo'
 import help from './help'
 import image from './image'
@@ -23,13 +22,11 @@ export function install(bot: Telegraf<ContextMessageUpdate>, settingsMenu: Teleg
   bot.help(help.factory())
   bot.start(start.factory())
   bot.entity('pre', image.factory())
-  bot.command('/url', url.factory())
   bot.command('/repo', repo.factory())
   bot.command('/image', image.factory())
 }
 
 export const commands = {
-  url,
   repo,
   help,
   image,

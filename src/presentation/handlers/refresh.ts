@@ -1,5 +1,4 @@
-import carbon from '../../util/carbon'
-import entity from '../../util/entity'
+import shiki from '../../util/shiki'
 import { getKeyboard } from '../../util/keyboard'
 import { ContextMessageUpdate } from 'telegraf'
 
@@ -23,20 +22,14 @@ function factory() {
     } = ctx
     const { reply_to_message: originalMessage } = message
 
-    const url = entity.toUrl(originalMessage!, await ctx.config.getAll())
-
-    if (!url) return
-
-    const imageBuffer = await carbon.getScreenshotFromUrl({ url })
-
-    if (!imageBuffer) return console.log('No image buffer')
+    const imageBuffer = await shiki.highlightMessage(message)
 
     const inputMedia = {
       type: 'photo',
       media: { source: imageBuffer }
     }
 
-    const keyboard = getKeyboard(url, {
+    const keyboard = getKeyboard({
       from: originalMessage!.message_id,
       to: message.message_id
     }).asString()

@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import env from 'sugar-env'
 import { IMongoParams } from '@nindoo/mongodb-data-layer'
 

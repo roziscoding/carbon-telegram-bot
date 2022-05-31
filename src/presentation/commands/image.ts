@@ -1,5 +1,4 @@
-import carbon from '../../util/carbon'
-import entity from '../../util/entity'
+import shiki from '../../util/shiki'
 import { ContextMessageUpdate } from 'telegraf'
 import { getKeyboard } from '../../util/keyboard'
 
@@ -21,24 +20,21 @@ export function factory() {
       reply_to_message_id: ctx.message.message_id
     })
 
-    const url = entity.toUrl(message, await ctx.config.getAll())
+    const imageBuffer = await shiki.highlightMessage(message)
 
-    if (!url) return
-
-    const imageBuffer = await carbon.getScreenshotFromUrl({ url })
-
-    const extra = getKeyboard(url).asExtra().inReplyTo(ctx.message.message_id)
+    const extra = getKeyboard().asExtra().inReplyTo(ctx.message.message_id)
 
     const { message_id: imageMessageId } = await ctx.telegram.sendPhoto(
       chatId,
       { source: imageBuffer },
       extra as any
     )
+
     await ctx.telegram.deleteMessage(chatId, sentMessage.message_id)
 
     const refreshData = { from: messageId, to: imageMessageId, hideRefresh: deleteOriginalMessage }
 
-    const secondKeyboard = getKeyboard(url, refreshData).asString()
+    const secondKeyboard = getKeyboard(refreshData).asString()
 
     await ctx.telegram.editMessageReplyMarkup(chatId, imageMessageId, undefined, secondKeyboard)
 

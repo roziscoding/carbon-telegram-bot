@@ -1,5 +1,5 @@
 import menus from './menus'
-import Telegraf from 'telegraf'
+import Telegraf, { ContextMessageUpdate } from 'telegraf'
 import commands from './commands'
 import handlers from './handlers'
 import * as middlewares from './middlewares'
@@ -37,6 +37,10 @@ export async function factory(config: IAppConfig) {
   handlers.install(bot)
   commands.install(bot, settingsMenu)
   bot.action('ok', (ctx) => ctx.answerCbQuery('OK, hold on :D'))
+
+  bot.catch((err: unknown, ctx: ContextMessageUpdate) => {
+    return ctx.reply(`Error processing message: ${err}`)
+  })
 
   return bot
 }

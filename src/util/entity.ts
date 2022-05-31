@@ -1,27 +1,24 @@
-import carbon from './carbon'
-import { ReadableCarbonConfig } from './carbon/config'
 import { IncomingMessage, MessageEntity } from 'telegraf/typings/telegram-types'
 
-export function extract (message: IncomingMessage) {
+export function extract(message: IncomingMessage) {
   if (!message.entities || !message.entities.length) return null
-  return message.entities.find(entity => entity.type === 'pre' || entity.type === 'code')
+  return message.entities.find((entity) => entity.type === 'pre' || entity.type === 'code')
 }
 
-export function parse (message: IncomingMessage, entity: MessageEntity) {
+export function parse(message: IncomingMessage, entity: MessageEntity) {
   if (!message.text) return { language: 'auto', source: '' }
 
-  const code = message.text.substr(entity.offset, entity.length)
-  return carbon.getLanguage(code)
+  const source = message.text.substr(entity.offset, entity.length)
+
+  const lines = source.trim().split('\n')
+
+  if (lines.length <= 1) return { source, language: 'auto' }
+
+  const language = lines[0].trim().toLowerCase()
+
+  lines.shift()
+
+  return { source: lines.join('\n'), language }
 }
 
-export function toUrl (message: IncomingMessage, settings: Partial<ReadableCarbonConfig> = {}) {
-  const codeEntity = extract(message)
-
-  if (!codeEntity) return
-
-  const { source, language } = parse(message, codeEntity)
-
-  return carbon.getUrl(language, source, settings)
-}
-
-export default { extract, parse, toUrl }
+export default { extract, parse }
