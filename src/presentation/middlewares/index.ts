@@ -1,2 +1,2 @@
 export * as config from './config'
-export * as sentry from './sentry'
+export * as messageLog from './message-log'

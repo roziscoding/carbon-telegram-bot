@@ -1,41 +1,30 @@
-import menus from './menus'
+import { MongoClient } from 'mongodb'
+import { createConnection } from '../data/connection'
+import { Logger } from 'pino'
 import Telegraf, { ContextMessageUpdate } from 'telegraf'
+import { AppConfig } from '../app.config'
+import ConfigRepository from '../data/repositories/config'
 import commands from './commands'
 import handlers from './handlers'
+import menus from './menus'
 import * as middlewares from './middlewares'
-import { IAppConfig } from '../app.config'
 const session = require('telegraf/session')
-import mongodb from '@nindoo/mongodb-data-layer'
-import ConfigRepository from '../data/repositories/config'
 
-export async function factory(config: IAppConfig) {
+export async function factory(config: AppConfig, logger: Logger) {
   const bot = new Telegraf(config.telegram.token, { telegram: { webhookReply: false } })
 
-  const mongodbConnection = await mongodb.createConnection(config.mongodb)
+  const mongodbConnection = await createConnection(config.mongodb)
   const configRepository = ConfigRepository.factory(mongodbConnection)
 
   const settingsMenu = menus.factory()
 
   bot.use(session())
-  bot.use(middlewares.sentry.factory())
   bot.use(middlewares.config.factory(configRepository))
+  bot.use(middlewares.messageLog.factory(logger))
 
-  bot.use((ctx, next) => {
-    if (!next) return
-
-    if (!config.logMessages) return next()
-    if (!ctx.message?.from?.id) return next()
-
-    console.log()
-    console.log(`Handling message from ${ctx.message.from?.first_name} <${ctx.message.from.id}>`)
-    console.log(ctx.message.text)
-    console.log()
-
-    next()
-  })
-
-  handlers.install(bot)
+  handlers.install(bot, logger.child({ context: 'handlers' }))
   commands.install(bot, settingsMenu)
+
   bot.action('ok', (ctx) => ctx.answerCbQuery('OK, hold on :D'))
 
   bot.catch((err: unknown, ctx: ContextMessageUpdate) => {

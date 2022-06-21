@@ -1,13 +1,13 @@
-import bot from './bot'
-// import carbon from './carbon'
+import theme from './theme'
+import deleteOriginalMessage from './delete-original-message'
 import TelegrafInlineMenu from 'telegraf-inline-menu'
 
 export function factory() {
   const mainMenu = new TelegrafInlineMenu('Settings')
   mainMenu.setCommand('settings')
 
-  bot.install(mainMenu)
-  // carbon.install(mainMenu)
+  theme.install(mainMenu)
+  deleteOriginalMessage.install(mainMenu)
 
   return mainMenu
 }

@@ -1,10 +1,10 @@
-import { themes } from '../../../util/carbon/themes'
+import { BUNDLED_THEMES } from 'shiki'
 import TelegrafInlineMenu from 'telegraf-inline-menu/dist/source'
 
 export function install(parentMenu: TelegrafInlineMenu) {
   const menu = new TelegrafInlineMenu('Choose a theme:')
 
-  menu.select('select_theme', themes, {
+  menu.select('select_theme', BUNDLED_THEMES, {
     setFunc: async (ctx, id) => {
       await ctx.config.set('theme', id)
     },

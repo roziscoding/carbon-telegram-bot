@@ -1,12 +1,13 @@
 import shiki from '../../util/shiki'
 import { getKeyboard } from '../../util/keyboard'
 import { ContextMessageUpdate } from 'telegraf'
+import { Logger } from 'pino'
 
 const regex = /refresh/i
 
-function factory() {
+function factory(logger: Logger) {
   return async function handleRefresh(ctx: ContextMessageUpdate) {
-    if (!ctx.chat) return console.log('No ctx.chat')
+    if (!ctx.chat) return logger.debug('No ctx.chat')
     if (
       !ctx.callbackQuery ||
       !ctx.callbackQuery.message ||
@@ -22,7 +23,7 @@ function factory() {
     } = ctx
     const { reply_to_message: originalMessage } = message
 
-    const imageBuffer = await shiki.highlightMessage(message)
+    const imageBuffer = await shiki.highlightMessage(message, await ctx.config.get('theme'))
 
     const inputMedia = {
       type: 'photo',

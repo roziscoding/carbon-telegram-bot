@@ -1,11 +1,17 @@
+import { Logger } from 'pino'
 import { ContextMessageUpdate } from 'telegraf'
 
 const regex = /delete/i
 
-function factory () {
-  return async function handleRefresh (ctx: ContextMessageUpdate) {
+function factory(_logger: Logger) {
+  return async function handleRefresh(ctx: ContextMessageUpdate) {
     if (!ctx.chat) return
-    if (!ctx.callbackQuery || !ctx.callbackQuery.message || !ctx.callbackQuery.message.reply_to_message) return
+    if (
+      !ctx.callbackQuery ||
+      !ctx.callbackQuery.message ||
+      !ctx.callbackQuery.message.reply_to_message
+    )
+      return
 
     const { callbackQuery: query } = ctx
     const message = query.message!

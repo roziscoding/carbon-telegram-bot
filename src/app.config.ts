@@ -1,8 +1,7 @@
 import 'dotenv/config'
 import env from 'sugar-env'
-import { IMongoParams } from '@nindoo/mongodb-data-layer'
 
-export interface IAppConfig {
+export interface AppConfig {
   telegram: {
     token: string
   }
@@ -14,8 +13,11 @@ export interface IAppConfig {
   sentry: {
     dsn?: string
   }
-  mongodb: IMongoParams
-  logMessages: boolean
+  mongodb: {
+    uri: string
+    dbName: string
+  }
+  logLevel: string
 }
 
 function getEnvName(names: string | string[]): { name: string; alternatives: string[] } {
@@ -51,7 +53,7 @@ function requiredString(names: string | string[]) {
   return value
 }
 
-export const config: IAppConfig = {
+export const config: AppConfig = {
   telegram: {
     token: requiredString(['TELEGRAM_TOKEN', 'TELEGRAM_API_TOKEN'])
   },
@@ -65,12 +67,7 @@ export const config: IAppConfig = {
   },
   mongodb: {
     uri: requiredString('MONGODB_URI'),
-    dbName: env.get('MONGODB_DBNAME', 'carbon-now-sh'),
-    options: {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      poolSize: env.get.int('MONGODB_POOL_SIZE', 5)
-    }
+    dbName: env.get('MONGODB_DBNAME', 'carbon-now-sh')
   },
-  logMessages: env.get.boolean('LOG_MESSAGES', false)
+  logLevel: env.get('LOG_LEVEL', 'info')
 }

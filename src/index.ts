@@ -1,23 +1,15 @@
 import { config } from './app.config'
-// import * as Sentry from '@sentry/node'
 import server from './presentation/server'
-// import { RewriteFrames } from '@sentry/integrations'
+import pino from 'pino'
 
-// if (config.sentry.dsn) Sentry.init({
-//   dsn: config.sentry.dsn,
-//   integrations: [
-//     new RewriteFrames({
-//       root: __dirname || process.cwd()
-//     })
-//   ]
-// })
+const logger = pino()
 
-server.start(config).catch((err) => {
-  console.error('===== Fatal Error =====')
+server.start(config, logger.child({ context: 'server' })).catch((err) => {
+  logger.error('===== Fatal Error =====')
 
   const errStr = JSON.stringify(err)
   const errMsg = errStr !== '{}' ? errStr : err
 
-  console.error(errMsg)
+  logger.error(errMsg)
   process.exit(1)
 })
